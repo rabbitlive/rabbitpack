@@ -1,0 +1,2 @@
+# rabbitpack
+For webpack options
