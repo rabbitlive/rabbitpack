@@ -1,10 +1,10 @@
 //-*- mode: js2 -*-
-//-*- coding: utf8 -*-
+//-*- coding: utf-8 -*-
 
 /**
  * entry.js
  *
- * Copyright 2017 rabbit
+ * Copyright 2017-2018 rabbit
  *
  * Webpack entry option, default for react SPA.
  * 1. React hot reloader patch file, used for dev react app.
@@ -19,14 +19,14 @@
  */
 
 module.exports = {
-    entry: {
-	app: [
+  entry: {
+	  app: [
 	    'react-hot-loader/patch',      /* 1 */
 	    'webpack-dev-server/client',   /* 2 */
 	    'webpack/hot/only-dev-server', /* 3 */
 	    'src/app.js'                   /* 4 */
-	]
-    }
+	  ]
+  }
 }
 
 
@@ -34,24 +34,24 @@ module.exports = {
  * Production mode only build the main entry files.
  */
 module.exports.production = {
-    entry: {
-	app: [
+  entry: {
+	  app: [
 	    'src/app.js'
-	]
-    }
+	  ]
+  }
 }
 
 
 function makeEntry(key) {
-    return {
-	[key]: [ 'src/' + key + '.js' ]
-    }
+  return {
+	  [key]: [ 'src/' + key + '.js' ]
+  }
 }
 
 module.exports.multiEntry = patten => {
-    return {
-	entry: {
+  return {
+	  entry: {
 
-	}
-    }
+	  }
+  }
 }

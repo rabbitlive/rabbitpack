@@ -1,0 +1,40 @@
+{
+  "env": {
+    "development": {
+      "presets": [
+        [
+          "latest", {
+            "es2015": {
+              "modules": false
+            }
+          }
+        ],
+        "stage-3",
+        "react"
+      ],
+      "plugins": [
+        "transform-flow-strip-types",
+        "syntax-dynamic-import",
+        //"dynamic-import-webpack"
+      ]
+    },
+    "test": {
+      "presets": [ "latest", "react", "stage-3" ],
+      "plugins": "syntax-dynamic-import"
+    },
+    "production": {
+      "presets": [
+        [
+          "latest", {
+            "es2015": {
+              "modules": false
+            }
+          }
+        ],
+        "react",
+        "stage-3"
+      ],
+      "plugins": "syntax-dynamic-import"
+    }
+  }
+}
