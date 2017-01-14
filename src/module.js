@@ -18,12 +18,12 @@
 
 module.exports = {
   rules: [
-    require('./js-loader')
+    require('./es-loader')
   ]
 }
 
 module.exports.production = {
   rules: [
-    require('./js-loader').production
+    require('./es-loader').production
   ]
 }

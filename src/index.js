@@ -1,12 +1,44 @@
-//-*- mode: js2 -*-
+//-*- mode: js -*-
 //-*- coding: utf8 -*-
 
-if(process.env.NODE_ENV) {
-  module.exports = {
-	  entry: require('entry')
+/**
+ * index.js
+ *
+ * Copyright 2017-2018 rabbit
+ *
+ * Webpack Options.
+ * Rabbit want to combine webpack options, like:
+ *
+ * ```
+ * 1.Entry -> 2.Box -> 3.Output
+ * ```
+ *
+ * 1.Entry
+ * The entry means souce code, it maybe only one 
+ * `app.js` when project is a SPA, Or multi page
+ * project.
+ *
+ * 2.Output
+ * Bundle files. Diff for every evn.
+ *
+ * @author Rabbit
+ */
+
+const entry  = require('./entry')
+const output = require('./output')
+const box    = require('./box')
+
+const options = Object.assign(
+  {},
+  entry(),
+  output(),
+  { module: box },
+  {
+    plugins: [
+      output.plugins.html
+    ]
   }
-} else {
-  module.exports = {
-	  entry: require('entry.production')
-  }
-}
+)
+
+console.log(JSON.stringify(options))
+module.exports = options

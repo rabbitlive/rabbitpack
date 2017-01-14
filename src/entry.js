@@ -1,4 +1,4 @@
-//-*- mode: js2 -*-
+//-*- mode: js -*-
 //-*- coding: utf-8 -*-
 
 /**
@@ -18,14 +18,20 @@
  * @author Rabbit
  */
 
-module.exports = {
-  entry: {
-	  app: [
-	    'react-hot-loader/patch',      /* 1 */
-	    'webpack-dev-server/client',   /* 2 */
-	    'webpack/hot/only-dev-server', /* 3 */
-	    'src/app.js'                   /* 4 */
-	  ]
+const path = require('path')
+
+const entryfile = path.resolve(__dirname, 'app.js')
+
+module.exports = function entry() {
+  return {
+    entry: {
+	    app: [
+	      'react-hot-loader/patch',      /* 1 */
+	      'webpack-dev-server/client',   /* 2 */
+	      'webpack/hot/only-dev-server', /* 3 */
+	      entryfile                      /* 4 */
+	    ]
+    }
   }
 }
 
@@ -36,7 +42,7 @@ module.exports = {
 module.exports.production = {
   entry: {
 	  app: [
-	    'src/app.js'
+	    entryfile
 	  ]
   }
 }

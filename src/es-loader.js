@@ -11,9 +11,6 @@
  * 2. Convert ES6 syntax with babel.
  * 3. Babel-loader cacheable
  *
- * TODO Typescript supports
- * TODO Coffeescript supports
- *
  * @mode {react}
  * @author Rabbit
  */
