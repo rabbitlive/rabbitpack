@@ -18,8 +18,11 @@
  * `app.js` when project is a SPA, Or multi page
  * project.
  *
- * 2.Output
- * Bundle files. Diff for every evn.
+ * 2.Box
+ * Map from entry to output
+ *
+ * 3.Output
+ * Bundle files. Difference between each evn.
  *
  * @author Rabbit
  */
@@ -32,13 +35,11 @@ const options = Object.assign(
   {},
   entry(),
   output(),
-  { module: box },
+  box(),
   {
-    plugins: [
-      output.plugins.html
-    ]
+    plugins: Object.values(output.plugins())
   }
 )
 
-console.log(JSON.stringify(options))
+console.log(options.module.rules)
 module.exports = options

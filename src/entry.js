@@ -20,7 +20,6 @@
 
 const path = require('path')
 
-const entryfile = path.resolve(__dirname, 'app.js')
 
 module.exports = function entry() {
   return {
@@ -29,7 +28,7 @@ module.exports = function entry() {
 	      'react-hot-loader/patch',      /* 1 */
 	      'webpack-dev-server/client',   /* 2 */
 	      'webpack/hot/only-dev-server', /* 3 */
-	      entryfile                      /* 4 */
+	      'src/app.js'                   /* 4 */
 	    ]
     }
   }
@@ -39,13 +38,13 @@ module.exports = function entry() {
 /**
  * Production mode only build the main entry files.
  */
-module.exports.production = {
-  entry: {
-	  app: [
-	    entryfile
-	  ]
-  }
-}
+// module.exports.production = {
+//   entry: {
+// 	  app: [
+// 	    entryfile
+// 	  ]
+//   }
+// }
 
 
 function makeEntry(key) {
