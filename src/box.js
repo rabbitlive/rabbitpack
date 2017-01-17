@@ -128,3 +128,14 @@ module.exports = function box() {
     hints()
   )
 }
+
+
+module.exports.library = function libraryBox() {
+  let deps = pkg.dependencies
+
+  return Object.assign(
+    {},
+    box(),
+    { externals: Object.keys(deps) }
+  )
+}

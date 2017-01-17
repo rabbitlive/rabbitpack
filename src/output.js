@@ -32,8 +32,7 @@ const publicPath = '//'
 const devPath  = path.resolve(__dirname)
 const prodPath = path.resolve(__dirname, 'dist')
 
-const pkg = require('../package.json')
-
+const pkg = require(process.cwd() + './package.json')
 
 module.exports = function output() {
   return {
@@ -58,7 +57,7 @@ module.exports.library = function outputLibrary() {
       path: prodPath,
       filename: '[name].js',
       publicPath: publicPath,
-      library: pkg.name,
+      library: pkg ? pkg.name || path.basename(process.cwd()),
       libraryTarget: 'umd'
     }
   }

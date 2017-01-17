@@ -6,7 +6,11 @@
  *
  * Copyright 2017-2018 rabbit
  *
- * Webpack Options. Build library
+ * Webpack Options. Build librarys.
+ * What's the difference?
+ * 1. lib name always the packageJson.name
+ * 2. lib require other librarys maybe define in packageJson.dependencies
+ * So...
  *
  * @author Rabbit
  */
