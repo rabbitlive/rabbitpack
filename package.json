@@ -1,6 +1,6 @@
 {
     "name": "rabbitpack",
-    "version": "0.0.2-rc.2",
+    "version": "0.0.2-rc.3",
     "main": "src/index.js",
     "license": "MIT",
     "dependencies": {
