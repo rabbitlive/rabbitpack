@@ -32,11 +32,13 @@ const publicPath = '//'
 const devPath  = path.resolve(__dirname)
 const prodPath = path.resolve(__dirname, 'dist')
 
+const pkg = require('../package.json')
+
 
 module.exports = function output() {
   return {
     output: {
-      path: devPath, 
+      path: devPath,
       filename: '[name].js',
       publicPath: publicPath
     }
@@ -44,9 +46,20 @@ module.exports = function output() {
 }
 
 module.exports.production = {
-  path: prodPath, 
+  path: prodPath,
   filename: '[name].[chunkhash].js',
   publicPath: publicPath
+}
+
+
+module.exports.library = function outputLibrary() {
+  return {
+    path: prodPath,
+    filename: '[name].js',
+    publicPath: publicPath,
+    library: pkg.name,
+    libraryTarget: 'umd'
+  }
 }
 
 
@@ -59,7 +72,7 @@ const ExtractTextPlugin   = require('extract-text-webpack-plugin')
 
 
 module.exports.plugins = {
-  
+
   // You really need combine commons code with SPA?
   // @mode {MultiEntry}
   commons: new webpack.optimize.CommonsChunkPlugin({

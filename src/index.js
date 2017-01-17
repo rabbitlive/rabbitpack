@@ -14,7 +14,7 @@
  * ```
  *
  * 1.Entry
- * The entry means souce code, it maybe only one 
+ * The entry means souce code, it maybe only one
  * `app.js` when project is a SPA, Or multi page
  * project.
  *
