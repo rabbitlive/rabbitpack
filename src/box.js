@@ -19,7 +19,7 @@
 
 const path = require('path')
 
-
+const pkg = require(process.cwd() + '/package.json')
 
 /// Loaders ///
 
@@ -115,7 +115,7 @@ module.exports = function box() {
   let mod = function makeModule() {
     return {
       module: {
-        rules: [esl.rule].map(excludeNodeModulesDir),
+        rules: [esl.rule] //.map(excludeNodeModulesDir),
       },
       resolve: {
         extensions: defaultExts.concat(esl.exts)

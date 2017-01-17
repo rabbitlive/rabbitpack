@@ -29,10 +29,10 @@ const publicPath = '//'
 
 // Did you mind the build path?
 // Also the name
-const devPath  = path.resolve(__dirname)
-const prodPath = path.resolve(__dirname, 'dist')
+const devPath  = './'
+const prodPath = './dist'
 
-const pkg = require(process.cwd() + './package.json')
+const pkg = require(process.cwd() + '/package.json')
 
 module.exports = function output() {
   return {
