@@ -21,7 +21,7 @@ describe('webpack dev options', () => {
   let prefix = 'test'
 
   // remove test dirs
-  spawn('rm', ['-rf', 'tmp/' + prefix + '_*'])
+  //spawn('rm', ['-rf', 'tmp/' + prefix + '_*'])
 
 
   let target = path.resolve(__dirname, '../tmp', [prefix, uuid].join('_'))
@@ -46,8 +46,7 @@ describe('webpack dev options', () => {
       })
     })
   }
-  
-  
+
   it('should output simple "console.log"', () => {
     return webpackPromise()
       .then(res => {

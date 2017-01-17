@@ -54,11 +54,13 @@ module.exports.production = {
 
 module.exports.library = function outputLibrary() {
   return {
-    path: prodPath,
-    filename: '[name].js',
-    publicPath: publicPath,
-    library: pkg.name,
-    libraryTarget: 'umd'
+    output: {
+      path: prodPath,
+      filename: '[name].js',
+      publicPath: publicPath,
+      library: pkg.name,
+      libraryTarget: 'umd'
+    }
   }
 }
 

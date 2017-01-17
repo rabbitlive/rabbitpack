@@ -31,15 +31,16 @@ const entry  = require('./entry')
 const output = require('./output')
 const box    = require('./box')
 
+let outputPlugins = output.plugins()
+
 const options = Object.assign(
   {},
   entry(),
   output(),
   box(),
   {
-    plugins: Object.values(output.plugins())
+    plugins: Object.keys(outputPlugins).map(x => outputPlugins[x])
   }
 )
 
-console.log(options.module.rules)
 module.exports = options

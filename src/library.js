@@ -11,7 +11,7 @@
  * @author Rabbit
  */
 
-const entry  = require('./entry')
+const entry  = require('./entry').simple
 const output = require('./output').library
 const box    = require('./box')
 

@@ -28,7 +28,7 @@ module.exports = function entry() {
 	      'react-hot-loader/patch',      /* 1 */
 	      'webpack-dev-server/client',   /* 2 */
 	      'webpack/hot/only-dev-server', /* 3 */
-	      'src/app.js'                   /* 4 */
+	      './src/app.js'                 /* 4 */
 	    ]
     }
   }
@@ -38,13 +38,13 @@ module.exports = function entry() {
 /**
  * Production mode only build the main entry files.
  */
-// module.exports.production = {
-//   entry: {
-// 	  app: [
-// 	    entryfile
-// 	  ]
-//   }
-// }
+module.exports.simple = function simpleEntry() {
+  return {
+    entry: {
+	    app: './src/app.js'
+    }
+  }
+}
 
 
 function makeEntry(key) {

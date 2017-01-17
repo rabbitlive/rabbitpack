@@ -18,7 +18,7 @@ describe('package library.', () => {
   let prefix = 'test'
 
   // remove test dirs
-  spawn('rm', ['-rf', 'tmp/' + prefix + '_*'])
+  //spawn('rm', ['-rf', 'tmp/' + prefix + '_*'])
 
 
   let target = path.resolve(__dirname, '../tmp', [prefix, uuid].join('_'))
@@ -30,6 +30,7 @@ describe('package library.', () => {
 
   function webpackPromise() {
     return new Promise((resolve, reject) => {
+      console.log(options)
       options.context = target
       options.output.path = path.resolve(path.resolve(target, 'build'))
       let compile = webpack(options)
