@@ -57,7 +57,7 @@ module.exports.library = function outputLibrary() {
       path: prodPath,
       filename: '[name].js',
       publicPath: publicPath,
-      library: pkg ? pkg.name || path.basename(process.cwd()),
+      library: pkg ? pkg.name : path.basename(process.cwd()),
       libraryTarget: 'umd'
     }
   }

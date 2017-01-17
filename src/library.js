@@ -17,7 +17,7 @@
 
 const entry  = require('./entry').simple
 const output = require('./output').library
-const box    = require('./box')
+const box    = require('./box').library
 
 const options = Object.assign(
   {},
