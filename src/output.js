@@ -71,6 +71,17 @@ const template            = require('html-webpack-template')
 const ExtractTextPlugin   = require('extract-text-webpack-plugin')
 
 
+module.exports.plugins = function outputPlugins() {
+  return {
+    html: new HtmlWebpackPlugin({
+      template: template,
+      title: 'App'
+    })
+  }
+}
+
+
+/*
 module.exports.plugins = {
 
   // You really need combine commons code with SPA?
@@ -118,3 +129,4 @@ module.exports.plugins = {
   })
 
 }
+*/

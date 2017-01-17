@@ -1,4 +1,4 @@
-//-*- mode: js2 -*-
+//-*- mode: js -*-
 //-*- coding: utf-8 -*-
 
 /**

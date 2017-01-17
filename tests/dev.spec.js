@@ -3,6 +3,8 @@
 
 /**
  * dev.spec.js
+ *
+ * Dev mode tester
  */
 
 
@@ -32,21 +34,24 @@ describe('webpack dev options', () => {
   function webpackPromise() {
     return new Promise((resolve, reject) => {
       options.context = target
-      options.output.path = path.resolve(path.resolve(target, 'build'))
+      options.entry.app.pop()
+      options.entry.app.push(path.resolve(target, 'src/app.js'))
+      options.output.path = path.resolve(target, 'build')
       let compile = webpack(options)
       compile.run((err, stats) => {
         if(err) reject(err)
         if(stats.hasErrors()) reject(stats.errorDetails)
         console.log(stats.toString())
-        resolve(fs.readFileSync(path.resolve(target, 'build/app.js')))
+        resolve(fs.readFileSync(path.resolve(target, 'build/app.js'), 'utf-8'))
       })
     })
   }
   
   
-  it('', () => {
-    return webpackPromise().then(res => {
-      expect(res).toBe('console.log(42)')
-    })
+  it('should output simple "console.log"', () => {
+    return webpackPromise()
+      .then(res => {
+        expect(/console.log\(42\)/.test(res)).toBe(true)
+      })
   })
 })
