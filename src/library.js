@@ -19,6 +19,7 @@ const options = Object.assign(
   {},
   entry(),
   output(),
+  box()
 )
 
 module.exports = options

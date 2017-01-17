@@ -20,15 +20,20 @@
 
 const path = require('path')
 
+const DEFAULT = {
+  entryfile: 'index',
+  entrydir:  'src'
+}
+
 
 module.exports = function entry() {
   return {
     entry: {
-	    app: [
+	    main: [
 	      'react-hot-loader/patch',      /* 1 */
 	      'webpack-dev-server/client',   /* 2 */
 	      'webpack/hot/only-dev-server', /* 3 */
-	      './src/app.js'                 /* 4 */
+	      './src/index.js'               /* 4 */
 	    ]
     }
   }
@@ -41,7 +46,7 @@ module.exports = function entry() {
 module.exports.simple = function simpleEntry() {
   return {
     entry: {
-	    app: './src/app.js'
+	    main: './src/index.js'
     }
   }
 }

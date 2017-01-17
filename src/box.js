@@ -78,7 +78,7 @@ const defaultExts = ['.js', '.json']
 // 2.Hybrid
 // 3.WechatApp
 function defaultAlias() {
-  
+
 }
 
 function wechatAppAlias() {
