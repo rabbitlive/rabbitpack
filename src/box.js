@@ -1,5 +1,5 @@
 //-*- mode: js -*-
-//-*- coding: utf8 -*-
+//-*- coding: utf-8 -*-
 
 /**
  * box.js
@@ -9,7 +9,8 @@
  * Builders.
  * 1.module options
  * 2.devtool
- * 3.hints
+ * 3.devserver
+ * 4.hints
  *
  * @see 
  *
@@ -18,8 +19,8 @@
 
 
 const path = require('path')
-
 const pkg = require(process.cwd() + '/package.json')
+
 
 /// Loaders ///
 
@@ -107,10 +108,13 @@ function hints() {
 }
 
 
+function getOrEls(defaultValue, x) {
+  return x ? x : defaultValue
+}
 
 
 
-module.exports = function box() {
+function box() {
   let esl = esLoader()
   let mod = function makeModule() {
     return {
@@ -130,12 +134,17 @@ module.exports = function box() {
 }
 
 
-module.exports.library = function libraryBox() {
+function libraryBox() {
   let deps = pkg.dependencies
 
   return Object.assign(
     {},
     box(),
-    { externals: Object.keys(deps) }
+    getOrEls({}, { externals: Object.keys(deps) })
   )
 }
+
+
+
+module.exports = box
+module.exports.library = libraryBox()
