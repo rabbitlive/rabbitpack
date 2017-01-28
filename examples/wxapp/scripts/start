@@ -1,0 +1,12 @@
+#!bin/bash
+
+START="\
+node node_modules/webpack/bin/webpack.js \
+--watch \
+--config ../../src/wxapp.js
+"
+
+rm -r dist/*
+$START $*
+
+#cp dist/main.js ../../wxapp/yihuan/src/lib/main.js

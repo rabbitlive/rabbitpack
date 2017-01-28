@@ -64,6 +64,44 @@ module.exports.library = function outputLibrary() {
 }
 
 
+const CopyWebpackPlugin = require('copy-webpack-plugin') 
+
+function wxappOutput() {
+  return {
+    output: {
+      path: prodPath,
+      filename: '[name].js',
+      publicPath: publicPath,
+      libraryTarget: 'commonjs2'
+    },
+    plugins: [
+      new CopyWebpackPlugin([{
+        from: './src/app.json',
+        to: './'
+      },{
+        from: './pages/**/*.+(wxml|wxss)',
+        to: '[path][name].[ext]',
+        context: 'src'
+      },{
+        from: './node_modules/redux/dist/redux.js',
+        to: './lib/redux.js'
+      },{
+        from: './node_modules/redux-thunk/dist/redux-thunk.js',
+        to: './lib/redux-thunk.js'
+      },{
+        from: './node_modules/redux-logger/dist/index.js',
+        to: './lib/redux-logger.js'
+      },{
+        from: './node_modules/wxapp-redux/dist/wxapp-redux.js',
+        to: './lib/wxapp-redux.js'
+      }])
+    ]
+  }
+}
+
+module.exports.wxapp = wxappOutput
+
+
 const webpack             = require('webpack')
 const ManifestPlugin      = require('webpack-manifest-plugin')
 const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin')

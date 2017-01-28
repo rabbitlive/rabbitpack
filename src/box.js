@@ -77,12 +77,12 @@ const defaultExts = ['.js', '.json']
 // Used for different App mode
 // 1.SPA
 // 2.Hybrid
-// 3.WechatApp
+// 3.wxapp
 function defaultAlias() {
 
 }
 
-function wechatAppAlias() {
+function wxappAlias() {
 
 }
 
@@ -145,6 +145,18 @@ function libraryBox() {
 }
 
 
+function wxappBox() {
+  let deps = pkg.dependencies
+
+  return Object.assign(
+    {},
+    box(),
+    getOrEls({}, { externals: Object.keys(deps).map(x => ({ [x]: `lib/${x}` })) })
+  )
+}
+
+
 
 module.exports = box
-module.exports.library = libraryBox()
+module.exports.library = libraryBox
+module.exports.wxapp = wxappBox

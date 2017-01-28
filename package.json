@@ -1,6 +1,6 @@
 {
     "name": "rabbitpack",
-    "version": "0.0.2-rc.6",
+    "version": "0.0.2-rc.8",
     "main": "src/index.js",
     "license": "MIT",
     "dependencies": {
@@ -9,6 +9,7 @@
         "babel-preset-latest": "^6.16.0",
         "babel-preset-stage-3": "^6.17.0",
         "chunk-manifest-webpack-plugin": "^1.0.0",
+        "copy-webpack-plugin": "^4.0.1",
         "css-loader": "^0.26.1",
         "extract-text-webpack-plugin": "^1.0.1",
         "html-webpack-plugin": "^2.26.0",
@@ -17,7 +18,7 @@
         "postcss-loader": "^1.2.2",
         "react-hot-loader": "3.0.0-beta.6",
         "style-loader": "^0.13.1",
-        "webpack": "2.2.0-rc.3",
+        "webpack": "2.2.0",
         "webpack-dev-server": "^1.16.2",
         "webpack-manifest-plugin": "^1.1.0"
     },

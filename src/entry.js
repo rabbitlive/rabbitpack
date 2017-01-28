@@ -19,6 +19,7 @@
  * @author Rabbit
  */
 
+const glob = require('glob')
 const path = require('path')
 
 const DEFAULTOPTIONS = {
@@ -50,21 +51,44 @@ function simpleEntry() {
 }
 
 
-function makeEntry(key) {
+const pkg = require(process.cwd() + '/package.json')
+
+function libraryEntry() {
   return {
-	  [key]: [ 'src/' + key + '.js' ]
+    [pkg.name]: './src/index.js'
   }
 }
 
 
-module.exports.multiEntry = patten => {
-  return {
-	  entry: {
+/**
+ * WeChat app looks like multi entries app.
+ *
+ * @see https://github.com/rabbitlive/rabbitinit/tree/master/wxapp
+ */
+function wxappEntry() {
 
-	  }
+  let regex = /src\/pages\/(\w+)\/\w+.js/;
+  
+  return {
+    entry: () => {
+
+      let pages = {}
+      let core = []
+
+      glob.sync(`./src/pages/**/*.js`).forEach(x => {
+        let name = x.match(regex)[1]
+        let key = `pages/${name}/${name}`
+        pages[key] = x
+      })
+
+      return Object.assign({}, pages, {
+        app: './src/app.js',
+      })
+    }
   }
 }
-
 
 module.exports = entry
 module.exports.simple = simpleEntry
+module.exports.library = libraryEntry
+module.exports.wxapp = wxappEntry

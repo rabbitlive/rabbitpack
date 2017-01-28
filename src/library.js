@@ -8,14 +8,14 @@
  *
  * Webpack Options. Build librarys.
  * What's the difference?
- * 1. lib name always the packageJson.name
- * 2. lib require other librarys maybe define in packageJson.dependencies
+ * 1. Library name always the packageJson.name
+ * 2. Library require other librarys maybe define in packageJson.dependencies
  * So...
  *
  * @author Rabbit
  */
 
-const entry  = require('./entry').simple
+const entry  = require('./entry').library
 const output = require('./output').library
 const box    = require('./box').library
 

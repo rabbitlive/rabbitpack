@@ -31,7 +31,7 @@ const entry  = require('./entry')
 const output = require('./output')
 const box    = require('./box')
 
-let outputPlugins = output.plugins()
+const outputPlugins = output.plugins()
 
 const options = Object.assign(
   {},

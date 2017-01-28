@@ -1,0 +1,22 @@
+{
+    "name": "wxapp-example",
+    "version": "0.0.1",
+    "description": "wxapp file struct",
+    "main": "index.js",
+    "repository": {},
+    "author": "Rabbit <yfhj1990@hotmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "redux": "^3.6.0",
+        "redux-logger": "^2.7.4",
+        "redux-thunk": "^2.2.0",
+        "wxapp-redux": "^0.0.0-rc.5"
+    },
+    "scripts": {
+        "start": "bash scripts/start"
+    },
+    "devDependencies": {
+        "rabbitpack": "^0.0.2-rc.7",
+        "webpack": "2.2.0"
+    }
+}
