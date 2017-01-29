@@ -151,7 +151,19 @@ function wxappBox() {
   return Object.assign(
     {},
     box(),
-    getOrEls({}, { externals: Object.keys(deps).map(x => ({ [x]: `lib/${x}` })) })
+    getOrEls({}, {
+      externals: (context, request, callback) => {
+        const isPage = context.match(/pages/)
+        const libPath =  !isPage ? 'lib' : '../../lib'
+        
+        if(deps[request]) {
+          callback(null, `${libPath}/${request}`)
+          return
+        }
+        
+        callback()
+      }
+    })
   )
 }
 
