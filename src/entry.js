@@ -55,7 +55,9 @@ const pkg = require(process.cwd() + '/package.json')
 
 function libraryEntry() {
   return {
-    [pkg.name]: './src/index.js'
+    entry: {
+      [pkg.name]: './src/index.js'
+    }
   }
 }
 

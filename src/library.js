@@ -20,13 +20,10 @@ const entry  = require('./entry').library
 const output = require('./output').library
 const box    = require('./box').library
 
-
-
-const options = output().map(x => Object.assign(
-  {}
-  x,
-  entry(),
-  box()
-}))
+const options = output()
+      .map(x => Object.assign({},
+                              x,
+                              entry(),
+                              box()))
 
 module.exports = options
