@@ -83,6 +83,7 @@ function wxappEntry() {
 
       return Object.assign({}, pages, {
         app: './src/app.js',
+        'lib/redux': 'redux'
       })
     }
   }

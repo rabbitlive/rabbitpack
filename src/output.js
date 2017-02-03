@@ -50,21 +50,34 @@ module.exports.production = {
   publicPath: publicPath
 }
 
+const webpack           = require('webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
+
 
 module.exports.library = function outputLibrary() {
-  return {
-    output: {
-      path: prodPath,
-      filename: '[name].js',
-      publicPath: publicPath,
-      library: pkg ? pkg.name : path.basename(process.cwd()),
-      libraryTarget: 'umd'
-    }
+  const commons = {
+    path: prodPath,
+    publicPath: publicPath,
+    library: pkg ? pkg.name : path.basename(process.cwd()),
+    libraryTarget: 'umd'
   }
+
+  return [{
+    output: Object.assign({}, commons, {
+      filename: '[name].js'
+    })
+  },{
+    output: Object.assign({}, commons, {
+      filename: '[name].min.js'
+    }),
+    plugins: [
+      new UglifyJSPlugin()
+    ]
+  }]
 }
 
-
-const CopyWebpackPlugin = require('copy-webpack-plugin') 
 
 function wxappOutput() {
   return {
@@ -72,19 +85,20 @@ function wxappOutput() {
       path: prodPath,
       filename: '[name].js',
       publicPath: publicPath,
-      libraryTarget: 'commonjs2'
+      libraryTarget: 'umd'
     },
     plugins: [
       new CopyWebpackPlugin([{
         from: './src/app.json',
         to: './'
       },{
-        from: './pages/**/*.+(wxml|wxss)',
-        to: '[path][name].[ext]',
+        from: './pages/**/*.json',
+        to: '[path][name].json',
         context: 'src'
       },{
-        from: './node_modules/redux/dist/redux.js',
-        to: './lib/redux.js'
+        from: './pages/**/*.html',
+        to: '[path][name].wxml',
+        context: 'src'
       },{
         from: './node_modules/redux-thunk/dist/redux-thunk.js',
         to: './lib/redux-thunk.js'
@@ -94,20 +108,31 @@ function wxappOutput() {
       },{
         from: './node_modules/wxapp-redux/dist/wxapp-redux.js',
         to: './lib/wxapp-redux.js'
-      }])
+      }]),
+
+      new ExtractTextPlugin({
+        filename: 'app.wxss',
+        allChunks: true
+      }),
+      
+      new webpack.LoaderOptionsPlugin({
+        options: {
+          postcss: []
+        }
+      })
     ]
   }
 }
 
-module.exports.wxapp = wxappOutput
+module.exports.wxapp = wxappOutput 
 
 
-const webpack             = require('webpack')
+
 const ManifestPlugin      = require('webpack-manifest-plugin')
 const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin')
 const HtmlWebpackPlugin   = require('html-webpack-plugin')
 const template            = require('html-webpack-template')
-const ExtractTextPlugin   = require('extract-text-webpack-plugin')
+
 
 
 module.exports.plugins = function outputPlugins() {

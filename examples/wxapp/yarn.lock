@@ -1507,6 +1507,14 @@ extglob@^0.3.1:
   dependencies:
     is-extglob "^1.0.0"
 
+extract-text-webpack-plugin@2.0.0-rc.1:
+  version "2.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/extract-text-webpack-plugin/-/extract-text-webpack-plugin-2.0.0-rc.1.tgz#4d31550bdb3fd747008efa31d2150422128a3703"
+  dependencies:
+    async "^2.1.2"
+    loader-utils "^0.2.16"
+    webpack-sources "^0.1.0"
+
 extract-text-webpack-plugin@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/extract-text-webpack-plugin/-/extract-text-webpack-plugin-1.0.1.tgz#c95bf3cbaac49dc96f1dc6e072549fbb654ccd2c"
@@ -3929,9 +3937,9 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
 
-wxapp-redux@^0.0.0-rc.5:
-  version "0.0.0-rc.5"
-  resolved "https://registry.yarnpkg.com/wxapp-redux/-/wxapp-redux-0.0.0-rc.5.tgz#5aebc90fe71953574b6ab91fdbd05891f668bf9c"
+wxapp-redux@^0.0.0-rc.9:
+  version "0.0.0-rc.9"
+  resolved "https://registry.yarnpkg.com/wxapp-redux/-/wxapp-redux-0.0.0-rc.9.tgz#f20f25f734e4a514e5027477c8a56e5363ce7793"
   dependencies:
     lodash.isfunction "^3.0.8"
     react-redux "^5.0.2"

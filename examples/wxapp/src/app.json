@@ -1,11 +1,11 @@
 {
   "pages":[
-    "pages/foo/foo"
+    "pages/index/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WXAPP",
+    "navigationBarTitleText": "wxapp",
     "navigationBarTextStyle":"black"
   }
 }

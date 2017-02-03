@@ -1,0 +1,5 @@
+function resolveUmdPath(lib) {
+  try {
+    
+  }
+}

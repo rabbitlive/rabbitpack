@@ -37,11 +37,9 @@ const pkg = require(process.cwd() + '/package.json')
  * @author Rabbit
  */
 function esLoader() {
-  const tester = /\.jsx?$/;
-
   return {
     rule: {
-      test: tester,
+      test: /\.jsx?$/,
       use: [{
         loader: 'babel-loader',
         options: {
@@ -50,6 +48,30 @@ function esLoader() {
       }]
     },
     exts: ['.jsx']
+  }
+}
+
+
+//const ExtractTextPlugin = require('./css').wxappStyle
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+function cssLoader() {
+  return {
+    rule: {
+      test: /\.css$/,
+      loader: ExtractTextPlugin.extract({
+        loader: [{
+          loader: 'css-loader',
+          query: {
+            modules: true,
+            importLoaders: 1
+          }
+        },{
+          loader: 'postcss-loader'
+        }]
+      })
+    },
+    exts: ['.css']
   }
 }
 
@@ -102,7 +124,7 @@ function hints() {
       maxAssetSize: 200000,      // 200kb
       maxEntrypointSize: 200000  // 200kb
     },
-    devtool: 'cheap-module-source-map',
+    //devtool: 'cheap-module-source-map',
     cache: true
   }
 }
@@ -115,14 +137,18 @@ function getOrEls(defaultValue, x) {
 
 
 function box() {
-  let esl = esLoader()
-  let mod = function makeModule() {
+  const esl = esLoader()
+  const cssl = cssLoader()
+  const mod = function makeModule() {
     return {
       module: {
-        rules: [esl.rule] //.map(excludeNodeModulesDir),
+        rules: [
+          esl.rule,
+          cssl.rule
+        ] //.map(excludeNodeModulesDir),
       },
       resolve: {
-        extensions: defaultExts.concat(esl.exts)
+        extensions: defaultExts.concat(esl.exts).concat(cssl.exts)
       }
     }
   }
@@ -155,8 +181,8 @@ function wxappBox() {
       externals: (context, request, callback) => {
         const isPage = context.match(/pages/)
         const libPath =  !isPage ? 'lib' : '../../lib'
-        
-        if(deps[request]) {
+
+        if(deps[request] && request !== 'redux') {
           callback(null, `${libPath}/${request}`)
           return
         }
