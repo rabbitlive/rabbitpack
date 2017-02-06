@@ -17,15 +17,23 @@
  * @author Rabbit
  */
 
-const entry  = require('./entry').wxapp
-const output = require('./output').wxapp
+const entry  = require('./entry')
+const output = require('./output')
 const box    = require('./box').wxapp
 
-const options = Object.assign(
-  {},
-  entry(),
-  output(),
-  box()
-)
+const options = [
+  Object.assign(
+    {},
+    entry.wxapp(),
+    output.wxapp(),
+    box()
+  ),
+  Object.assign(
+    {},
+    entry.wxappLibs(),
+    output.wxappLibs(),
+    box()
+  )
+]
 
 module.exports = options

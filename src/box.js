@@ -174,6 +174,8 @@ function libraryBox() {
 function wxappBox() {
   let deps = pkg.dependencies
 
+  console.log(deps)
+
   return Object.assign(
     {},
     box(),
@@ -182,7 +184,7 @@ function wxappBox() {
         const isPage = context.match(/pages/)
         const libPath =  !isPage ? 'lib' : '../../lib'
 
-        if(deps[request] && request !== 'redux') {
+        if(deps[request]) {
           callback(null, `${libPath}/${request}`)
           return
         }

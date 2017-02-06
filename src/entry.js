@@ -27,7 +27,6 @@ const DEFAULTOPTIONS = {
   sourceDir:  'src'
 }
 
-
 function entry() {
   return {
     entry: [
@@ -78,15 +77,22 @@ function wxappEntry() {
       let core = []
 
       glob.sync(`./src/pages/**/*.js`).forEach(x => {
-        let name = x.match(regex)[1]
-        let key = `pages/${name}/${name}`
+        const name = x.match(regex)[1]
+        const key = `pages/${name}/${name}`
         pages[key] = x
       })
 
       return Object.assign({}, pages, {
-        app: './src/app.js',
-        'lib/redux': 'redux'
+        app: './src/app.js'
       })
+    }
+  }
+}
+
+function wxappLibsEntry() {
+  return {
+    entry: {
+      redux: 'redux'
     }
   }
 }
@@ -95,3 +101,4 @@ module.exports = entry
 module.exports.simple = simpleEntry
 module.exports.library = libraryEntry
 module.exports.wxapp = wxappEntry
+module.exports.wxappLibs = wxappLibsEntry

@@ -3,7 +3,7 @@
 START="\
 node node_modules/webpack/bin/webpack.js \
 --watch \
---config node_modules/rabbitpack/src/wxapp.js
+--config ../../src/wxapp.js
 "
 
 rm -r dist/*

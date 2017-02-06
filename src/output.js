@@ -78,8 +78,34 @@ module.exports.library = function outputLibrary() {
   }]
 }
 
+const glob = require('glob')
+
+function resolveUmdPath(name) {
+  const umdlibs = glob.sync(`./node_modules/${name}/dist/*.js`).sort()
+
+  if(!umdlibs.length) console.warn(`Can't find ${name} UMD version libs.`)
+
+  return (process.env.NODE_ENV === 'development' ? umdlibs : umdlibs.reverse())[0]
+}
+
+function copyLibToWxappLibdir(name) {
+  return {
+    from: resolveUmdPath(name),
+    to: process.env.NODE_ENV === 'development' ? `lib/${name}.js` : `lib/${name}.min.js`
+  }
+}
 
 function wxappOutput() {
+
+  const deps = pkg.dependencies
+
+  // remove **Redux**, Because redux UMD has a bug, when root and global objects both lost.
+  const copylibs = Object.keys(deps)
+        .filter(key => key !== 'redux')
+        .map(key => copyLibToWxappLibdir(key))
+
+  console.log(copylibs)
+  
   return {
     output: {
       path: prodPath,
@@ -88,33 +114,25 @@ function wxappOutput() {
       libraryTarget: 'umd'
     },
     plugins: [
-      new CopyWebpackPlugin([{
-        from: './src/app.json',
-        to: './'
-      },{
-        from: './pages/**/*.json',
-        to: '[path][name].json',
-        context: 'src'
-      },{
-        from: './pages/**/*.html',
-        to: '[path][name].wxml',
-        context: 'src'
-      },{
-        from: './node_modules/redux-thunk/dist/redux-thunk.js',
-        to: './lib/redux-thunk.js'
-      },{
-        from: './node_modules/redux-logger/dist/index.js',
-        to: './lib/redux-logger.js'
-      },{
-        from: './node_modules/wxapp-redux/dist/wxapp-redux.js',
-        to: './lib/wxapp-redux.js'
-      }]),
+      new CopyWebpackPlugin([
+
+        // Copy root config to dist/
+        { from: './src/app.json', to: './' },
+
+        // TODO file ext need custom setting with `viewFileExt: String = 'html'` 
+        { from: './pages/**/*.json', to: '[path][name].json', context: 'src' },
+        { from: './pages/**/*.+(html|wxml)', to: '[path][name].wxml', context: 'src' },
+
+        // Copy libs
+          ...copylibs
+      ]),
+
 
       new ExtractTextPlugin({
         filename: 'app.wxss',
         allChunks: true
       }),
-      
+
       new webpack.LoaderOptionsPlugin({
         options: {
           postcss: []
@@ -124,15 +142,25 @@ function wxappOutput() {
   }
 }
 
-module.exports.wxapp = wxappOutput 
+function wxappLibsOutput() {
+  return {
+    output: {
+      path: prodPath,
+      filename: '[name].js',
+      publicPath: publicPath,
+      libraryTarget: 'umd'
+    }
+  }
+}
 
+module.exports.wxapp = wxappOutput
+module.exports.wxappLibs = wxappLibsOutput
 
 
 const ManifestPlugin      = require('webpack-manifest-plugin')
 const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin')
 const HtmlWebpackPlugin   = require('html-webpack-plugin')
 const template            = require('html-webpack-template')
-
 
 
 module.exports.plugins = function outputPlugins() {
