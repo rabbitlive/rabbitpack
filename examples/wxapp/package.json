@@ -7,7 +7,6 @@
     "author": "Rabbit <yfhj1990@hotmail.com>",
     "license": "MIT",
     "dependencies": {
-        "extract-text-webpack-plugin": "2.0.0-rc.1",
         "redux": "^3.6.0",
         "redux-logger": "^2.7.4",
         "redux-thunk": "^2.2.0",
@@ -17,7 +16,8 @@
         "start": "bash scripts/start"
     },
     "devDependencies": {
-        "rabbitpack": "^0.0.2-rc.7",
+        "rabbitpack": "^0.0.2-rc.10",
+        "extract-text-webpack-plugin": "2.0.0-rc.1",
         "webpack": "2.2.0"
     }
 }
