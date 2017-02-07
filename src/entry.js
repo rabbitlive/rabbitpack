@@ -11,9 +11,10 @@
  * 2. WDS client, connect to WDS.
  * 3. Active hot reloader when update success.
  *
- * TODO multiEntry
- * TODO Angular framework supports
- * TODO Typescript
+ * TODO multiEntry.
+ * TODO Wechat smart app.
+ * TODO Angular framework supports.
+ * TODO Typescript.
  *
  * @mode {react}
  * @author Rabbit
@@ -96,6 +97,16 @@ function wxappLibsEntry() {
     }
   }
 }
+
+
+function selfEntry() {
+  return {
+    entry: {
+      wxapp: 'wxapp.js'
+    }
+  }
+}
+
 
 module.exports = entry
 module.exports.simple = simpleEntry

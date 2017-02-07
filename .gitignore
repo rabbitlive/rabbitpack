@@ -39,4 +39,4 @@ jspm_packages
 
 # Temp test directory
 tmp
-examples/**/dist
+examples
