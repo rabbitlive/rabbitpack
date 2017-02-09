@@ -36,11 +36,11 @@ const pkg = require(process.cwd() + '/package.json')
 
 module.exports = function output() {
   return {
-    output: {
-      path: devPath,
-      filename: '[name].js',
-      publicPath: publicPath
-    }
+	  output: {
+	    path: devPath,
+	    filename: '[name].js',
+	    publicPath: publicPath
+	  }
   }
 }
 
@@ -58,23 +58,23 @@ const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
 
 module.exports.library = function outputLibrary() {
   const commons = {
-    path: prodPath,
-    publicPath: publicPath,
-    library: pkg ? pkg.name : path.basename(process.cwd()),
-    libraryTarget: 'umd'
+	  path: prodPath,
+	  publicPath: publicPath,
+	  library: pkg ? pkg.name : path.basename(process.cwd()),
+	  libraryTarget: 'commonjs2'
   }
 
   return [{
-    output: Object.assign({}, commons, {
-      filename: '[name].js'
-    })
+	  output: Object.assign({}, commons, {
+	    filename: '[name].js'
+	  })
   },{
-    output: Object.assign({}, commons, {
-      filename: '[name].min.js'
-    }),
-    plugins: [
-      new UglifyJSPlugin()
-    ]
+	  output: Object.assign({}, commons, {
+	    filename: '[name].min.js'
+	  }),
+	  plugins: [
+	    new UglifyJSPlugin()
+	  ]
   }]
 }
 
@@ -85,15 +85,17 @@ function resolveUmdPath(name) {
 
   if(!umdlibs.length) console.warn(`Can't find ${name} UMD version libs.`)
 
-  return (process.env.NODE_ENV === 'development' ? umdlibs : umdlibs.reverse())[0]
+  return (process.env.NODE_ENV !== 'production' ? umdlibs : umdlibs.reverse())[0]
 }
 
 function copyLibToWxappLibdir(name) {
   return {
-    from: resolveUmdPath(name),
-    to: process.env.NODE_ENV === 'development' ? `lib/${name}.js` : `lib/${name}.min.js`
+	  from: resolveUmdPath(name),
+	  to: process.env.NODE_ENV !== 'production' ? `lib/${name}.js` : `lib/${name}.min.js`
   }
 }
+
+const ReplaceLibRequirePathPlugin = require('./ReplaceLibRequirePath') 
 
 function wxappOutput() {
 
@@ -103,53 +105,53 @@ function wxappOutput() {
   const copylibs = Object.keys(deps)
         .filter(key => key !== 'redux')
         .map(key => copyLibToWxappLibdir(key))
-
-  console.log(copylibs)
   
   return {
-    output: {
-      path: prodPath,
-      filename: '[name].js',
-      publicPath: publicPath,
-      libraryTarget: 'umd'
-    },
-    plugins: [
-      new CopyWebpackPlugin([
+	  output: {
+	    path: prodPath,
+	    filename: '[name].js',
+	    publicPath: publicPath,
+	    libraryTarget: 'commonjs2'
+	  },
+	  plugins: [
+	    new CopyWebpackPlugin([
 
-        // Copy root config to dist/
-        { from: './src/app.json', to: './' },
+		    // Copy root config to dist/
+		    { from: './src/app.json', to: './' },
 
-        // TODO file ext need custom setting with `viewFileExt: String = 'html'` 
-        { from: './pages/**/*.json', to: '[path][name].json', context: 'src' },
-        { from: './pages/**/*.+(html|wxml)', to: '[path][name].wxml', context: 'src' },
+		    // TODO file ext need custom setting with `viewFileExt: String = 'html'` 
+		    { from: './pages/**/*.json', to: '[path][name].json', context: 'src' },
+		    { from: './pages/**/*.+(html|wxml)', to: '[path][name].wxml', context: 'src' },
 
-        // Copy libs
-          ...copylibs
-      ]),
+		    // Copy libs
+		      ...copylibs
+	    ]),
 
 
-      new ExtractTextPlugin({
-        filename: 'app.wxss',
-        allChunks: true
-      }),
+	    new ExtractTextPlugin({
+		    filename: '[name].wxss',
+		    allChunks: true
+	    }),
 
-      new webpack.LoaderOptionsPlugin({
-        options: {
-          postcss: []
-        }
-      })
-    ]
+	    new webpack.LoaderOptionsPlugin({
+		    options: {
+		      postcss: []
+		    }
+	    }),
+
+	    new ReplaceLibRequirePathPlugin()
+	  ]
   }
 }
 
 function wxappLibsOutput() {
   return {
-    output: {
-      path: prodPath,
-      filename: '[name].js',
-      publicPath: publicPath,
-      libraryTarget: 'umd'
-    }
+	  output: {
+	    path: path.resolve(prodPath, 'lib'),
+	    filename: '[name].js',
+	    publicPath: publicPath,
+	    libraryTarget: 'umd'
+	  }
   }
 }
 
@@ -165,60 +167,60 @@ const template            = require('html-webpack-template')
 
 module.exports.plugins = function outputPlugins() {
   return {
-    html: new HtmlWebpackPlugin({
-      template: template,
-      title: 'App'
-    })
+	  html: new HtmlWebpackPlugin({
+	    template: template,
+	    title: 'App'
+	  })
   }
 }
 
 
 /*
-module.exports.plugins = {
+  module.exports.plugins = {
 
   // You really need combine commons code with SPA?
   // @mode {MultiEntry}
   commons: new webpack.optimize.CommonsChunkPlugin({
-    name: 'commons',
-    filename: 'commons.[chunkhash].js',
-    minChunks: Infinity,
+  name: 'commons',
+  filename: 'commons.[chunkhash].js',
+  minChunks: Infinity,
   }),
 
   // Generate manifest file for long team cache.
   // @env {Production}
   manifest: new ManifestPlugin({
-    filename: 'app-manifest.json',
+  filename: 'app-manifest.json',
   }),
   chunkManifest: new ChunkManifestPlugin({
-    filename: 'chunk-manifest.json',
-    manifestVariable: 'Manifest'
+  filename: 'chunk-manifest.json',
+  manifestVariable: 'Manifest'
   }),
 
   // Output HTML file
   // Just for dev mode
   html: new HtmlWebpackPlugin({
-    template: template,
-    title: 'App'
+  template: template,
+  title: 'App'
   }),
 
   ['html.production']: new HtmlWebpackPlugin({
-    template: template,
-    title: 'App',
-    // minify
-    minify: {
-      removeTagWhitespace: true,
-      collapseWhitespace: true
-    },
-    scripts: [
-    ]
+  template: template,
+  title: 'App',
+  // minify
+  minify: {
+  removeTagWhitespace: true,
+  collapseWhitespace: true
+  },
+  scripts: [
+  ]
   }),
 
 
   // Output style file
   style: new ExtractTextPlugin({
-    filename: 'app.[chunkhash].css',
-    allChunks: true
+  filename: 'app.[chunkhash].css',
+  allChunks: true
   })
 
-}
+  }
 */

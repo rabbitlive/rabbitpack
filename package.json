@@ -1,8 +1,11 @@
 {
     "name": "rabbitpack",
-    "version": "0.0.2-rc.10",
+    "version": "0.0.2-rc.16",
     "main": "src/index.js",
     "license": "MIT",
+    "files": [
+        "src"
+    ],
     "dependencies": {
         "babel-core": "^6.21.0",
         "babel-loader": "^6.2.10",

@@ -19,20 +19,23 @@
 
 const entry  = require('./entry')
 const output = require('./output')
-const box    = require('./box').wxapp
+const box    = require('./box')
 
 const options = [
   Object.assign(
     {},
     entry.wxapp(),
     output.wxapp(),
-    box()
+    box.wxapp()
   ),
   Object.assign(
     {},
     entry.wxappLibs(),
     output.wxappLibs(),
-    box()
+    box.library(),
+    {
+      externals: undefined
+    }
   )
 ]
 

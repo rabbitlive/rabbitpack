@@ -69,7 +69,7 @@ function libraryEntry() {
  */
 function wxappEntry() {
 
-  let regex = /src\/pages\/(\w+)\/\w+.js/;
+  const regex = /src\/pages\/([^\/]+)\/[^\.]+.js/;
   
   return {
     entry: () => {
