@@ -75,6 +75,20 @@ function cssLoader() {
   }
 }
 
+function htmlLoader() {
+  return {
+    rule: {
+      test: /\.css$/,
+      loader: ExtractTextPlugin.extract({
+        loader: [{
+          loader: 'html-loader'
+        }]
+      })
+    },
+    exts: ['.html']
+  }
+}
+
 
 function excludeNodeModulesDir(rule) {
   rule.exclude = [/node_modules/]
@@ -139,19 +153,26 @@ function getOrEls(defaultValue, x) {
 function box() {
   const esl = esLoader()
   const cssl = cssLoader()
+  const htmll = htmlLoader()
   const mod = function makeModule() {
     return {
       module: {
         rules: [
           esl.rule,
-          cssl.rule
+          cssl.rule,
+          html.rule
         ] //.map(excludeNodeModulesDir),
       },
       resolve: {
-        extensions: defaultExts.concat(esl.exts).concat(cssl.exts)
+        extensions: defaultExts.concat(
+          esl.exts,
+          cssl.exts,
+          htmll.exts
+        )
       }
     }
   }
+  
   return Object.assign(
     {},
     mod(),

@@ -61,7 +61,7 @@ module.exports.library = function outputLibrary() {
 	  path: prodPath,
 	  publicPath: publicPath,
 	  library: pkg ? pkg.name : path.basename(process.cwd()),
-	  libraryTarget: 'commonjs2'
+	  libraryTarget: 'umd'
   }
 
   return [{
@@ -130,6 +130,11 @@ function wxappOutput() {
 
 	    new ExtractTextPlugin({
 		    filename: '[name].wxss',
+		    allChunks: true
+	    }),
+
+      new ExtractTextPlugin({
+		    filename: '[name].wxml',
 		    allChunks: true
 	    }),
 
