@@ -53,13 +53,18 @@ function esLoader() {
 
 
 //const ExtractTextPlugin = require('./css').wxappStyle
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+//const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const {
+  WeChatAppExtractCSS,
+  WeChatAppExtractHTML,
+  WeChatAppExtractJSON
+} = require('./output')
 
 function cssLoader() {
   return {
     rule: {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract({
+      loader: WeChatAppExtractCSS.extract({
         loader: [{
           loader: 'css-loader',
           query: {
@@ -79,7 +84,7 @@ function htmlLoader() {
   return {
     rule: {
       test: /\.html$/,
-      loader: ExtractTextPlugin.extract({
+      loader: WeChatAppExtractHTML.extract({
         loader: [{
           loader: 'html-loader'
         }]
@@ -93,7 +98,7 @@ function jsonLoader() {
   return {
     rule: {
       test: /\.json$/,
-      loader: ExtractTextPlugin.extract({
+      loader: WeChatAppExtractJSON.extract({
         loader: [{
           loader: 'json-loader'
         }]

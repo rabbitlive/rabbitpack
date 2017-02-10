@@ -95,7 +95,24 @@ function copyLibToWxappLibdir(name) {
   }
 }
 
-const ReplaceLibRequirePathPlugin = require('./ReplaceLibRequirePath') 
+const ReplaceLibRequirePathPlugin = require('./ReplaceLibRequirePath')
+
+const WeChatAppExtractCSS = new ExtractTextPlugin({
+	filename: '[name].wxss',
+	allChunks: true
+})
+const WeChatAppExtractHTML = new ExtractTextPlugin({
+	filename: '[name].wxml',
+	allChunks: true
+})
+const WeChatAppExtractJSON = new ExtractTextPlugin({
+	filename: '[name].json',
+	allChunks: true
+})
+
+module.exports.WeChatAppExtractCSS = WeChatAppExtractCSS
+module.exports.WeChatAppExtractHTML = WeChatAppExtractHTML
+module.exports.WeChatAppExtractJSON = WeChatAppExtractJSON
 
 function wxappOutput() {
 
@@ -127,21 +144,9 @@ function wxappOutput() {
 		      ...copylibs
 	    ]),
 
-
-	    new ExtractTextPlugin({
-		    filename: '[name].wxss',
-		    allChunks: true
-	    }),
-
-      new ExtractTextPlugin({
-		    filename: '[name].wxml',
-		    allChunks: true
-	    }),
-
-      new ExtractTextPlugin({
-		    filename: '[name].json',
-		    allChunks: true
-	    }),
+      WeChatAppExtractCSS,
+      WeChatAppExtractHTML,
+      WeChatAppExtractJSON,
 
 	    new webpack.LoaderOptionsPlugin({
 		    options: {
