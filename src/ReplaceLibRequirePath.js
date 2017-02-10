@@ -12,11 +12,13 @@ module.exports = class ReplaceLibRequirePath {
 	  compiler.plugin('compilation', function(compilation, callback) {
 	    compilation.moduleTemplate.plugin('module', function(moduleSource, module, chunk){
 		    if(moduleSource instanceof RawSource) {
-		      if(/^pages/.test(chunk.name)) {
-			      return new RawSource(`module.exports = require('../../lib/${module.request}')`)
-		      } else {
-			      return new RawSource(`module.exports = require('lib/${module.request}')`)
-		      }
+          if(/^module\.exports\s+=\s+require\(/.test(moduleSource._value)) {
+		        if(/^pages/.test(chunk.name)) {
+			        return new RawSource(`module.exports = require('../../lib/${module.request}')`)
+		        } else {
+			        return new RawSource(`module.exports = require('lib/${module.request}')`)
+		        }
+          }
 		    }
 		    return moduleSource
 	    })

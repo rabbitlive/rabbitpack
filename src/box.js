@@ -172,7 +172,7 @@ function box() {
   const esl = esLoader()
   const cssl = cssLoader()
   const htmll = htmlLoader()
-  const jsonl = jsonLoader()
+  //const jsonl = jsonLoader()
   const mod = function makeModule() {
     return {
       module: {
@@ -180,7 +180,7 @@ function box() {
           esl.rule,
           cssl.rule,
           htmll.rule,
-          jsonl.rule
+          //jsonl.rule
         ] //.map(excludeNodeModulesDir),
       },
       resolve: {
@@ -215,23 +215,24 @@ function libraryBox() {
 function wxappBox() {
   let deps = pkg.dependencies
 
-  console.log(deps)
+  //console.log(deps)
 
   return Object.assign(
     {},
     box(),
     getOrEls({}, {
-      externals: (context, request, callback) => {
-        const isPage = context.match(/pages/)
-        const libPath =  !isPage ? 'lib' : '../../lib'
+      // externals: (context, request, callback) => {
+      //   const isPage = context.match(/pages/)
+      //   const libPath =  !isPage ? 'lib' : '../../lib'
 
-        if(deps[request]) {
-          callback(null, `${libPath}/${request}`)
-          return
-        }
+      //   if(deps[request]) {
+      //     callback(null, `${libPath}/${request}`)
+      //     return
+      //   }
         
-        callback()
-      }
+      //   callback()
+      // }
+      externals: Object.keys(deps)
     })
   )
 }

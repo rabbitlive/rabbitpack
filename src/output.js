@@ -134,10 +134,10 @@ function wxappOutput() {
 	    new CopyWebpackPlugin([
 
 		    // Copy root config to dist/
-		    //{ from: './src/app.json', to: './' },
+		    { from: './src/app.json', to: './' },
 
 		    // TODO file ext need custom setting with `viewFileExt: String = 'html'` 
-		    //{ from: './pages/**/*.json', to: '[path][name].json', context: 'src' },
+		    { from: './pages/**/*.json', to: '[path][name].json', context: 'src' },
 		    //{ from: './pages/**/*.+(html|wxml)', to: '[path][name].wxml', context: 'src' },
 
 		    // Copy libs
@@ -146,7 +146,7 @@ function wxappOutput() {
 
       WeChatAppExtractCSS,
       WeChatAppExtractHTML,
-      WeChatAppExtractJSON,
+      //WeChatAppExtractJSON,
 
 	    new webpack.LoaderOptionsPlugin({
 		    options: {
@@ -154,8 +154,14 @@ function wxappOutput() {
 		    }
 	    }),
 
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NamedModulesPlugin(),
+
 	    new ReplaceLibRequirePathPlugin()
-	  ]
+	  ],
+    devServer: {
+      hot: true
+    }
   }
 }
 

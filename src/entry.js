@@ -84,7 +84,11 @@ function wxappEntry() {
       })
 
       return Object.assign({}, pages, {
-        app: './src/app.js'
+        app: [
+          'webpack-dev-server/client',
+          'webpack/hot/only-dev-server',
+          './src/app.js'
+        ]
       })
     }
   }
