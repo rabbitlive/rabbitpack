@@ -78,7 +78,7 @@ function cssLoader() {
 function htmlLoader() {
   return {
     rule: {
-      test: /\.css$/,
+      test: /\.html$/,
       loader: ExtractTextPlugin.extract({
         loader: [{
           loader: 'html-loader'
@@ -86,6 +86,19 @@ function htmlLoader() {
       })
     },
     exts: ['.html']
+  }
+}
+
+function jsonLoader() {
+  return {
+    rule: {
+      test: /\.json$/,
+      loader: ExtractTextPlugin.extract({
+        loader: [{
+          loader: 'json-loader'
+        }]
+      })
+    }
   }
 }
 
@@ -154,13 +167,15 @@ function box() {
   const esl = esLoader()
   const cssl = cssLoader()
   const htmll = htmlLoader()
+  const jsonl = jsonLoader()
   const mod = function makeModule() {
     return {
       module: {
         rules: [
           esl.rule,
           cssl.rule,
-          html.rule
+          htmll.rule,
+          jsonl.rule
         ] //.map(excludeNodeModulesDir),
       },
       resolve: {

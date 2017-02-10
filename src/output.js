@@ -117,11 +117,11 @@ function wxappOutput() {
 	    new CopyWebpackPlugin([
 
 		    // Copy root config to dist/
-		    { from: './src/app.json', to: './' },
+		    //{ from: './src/app.json', to: './' },
 
 		    // TODO file ext need custom setting with `viewFileExt: String = 'html'` 
-		    { from: './pages/**/*.json', to: '[path][name].json', context: 'src' },
-		    { from: './pages/**/*.+(html|wxml)', to: '[path][name].wxml', context: 'src' },
+		    //{ from: './pages/**/*.json', to: '[path][name].json', context: 'src' },
+		    //{ from: './pages/**/*.+(html|wxml)', to: '[path][name].wxml', context: 'src' },
 
 		    // Copy libs
 		      ...copylibs
@@ -135,6 +135,11 @@ function wxappOutput() {
 
       new ExtractTextPlugin({
 		    filename: '[name].wxml',
+		    allChunks: true
+	    }),
+
+      new ExtractTextPlugin({
+		    filename: '[name].json',
 		    allChunks: true
 	    }),
 
