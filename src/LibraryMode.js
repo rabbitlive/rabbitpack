@@ -6,8 +6,15 @@
  */
 
 const webpack = require('webpack')
-const { camelCase } = require('lodash')
 const pkg = require('./pkg')
+const MakeLoaderOptions = require('./MakeLoaderOptions')
+const {
+  upperFirst,
+  camelCase,
+  isFunction,
+  assign,
+  update
+} = require('lodash')
 
 
 const DefaultLibraryModeOptions = {
@@ -18,6 +25,7 @@ const DefaultLibraryModeOptions = {
   outputCompressFileName: '[name].min.js',
   compressTools: 'uglify',
   libraryTarget: 'umd',
+  extname: 'js',
   excludeNodeModulesDir: false,
   includeSourceDir: false
 }
@@ -42,8 +50,15 @@ function mapCompressToPlugin(name, options = {}) {
 }
 
 
+function makeLibraryName(name, library) {
+  if(!library) return upperFirst(camelCase(name))
+  if(isFunction(library)) return library(name)
+  
+  return library
+}
 
-function libMode(options) {
+
+function libraryMode(options) {
   
   let {
     from,
@@ -54,20 +69,25 @@ function libMode(options) {
     outputFileName,
     outputCompressFileName,
     compressTools,
-    libraryTarget
+    libraryTarget,
+    library,
+    extname,
+    externals
   } = Object.assign({}, DefaultLibraryModeOptions, options)
 
   
-  let { name: libName, devDependencies: libDeps } = pkg()
-
+  let { name: libName, dependencies: libDeps = {} } = pkg()
 
   // Rewrite libName when provide `to` option.
   if(to) {
     if(!/\.js$/.test(to))
-      throw new Error(`Bad Output file name: ${to}`)
+      throw new Error(`Bad Output file name: ${to}, it need a file name like 'example.js'`)
 
-    libName = outputFileName.split('.js')[0] 
+    let splited = to.split('.js')[0]
+    libName = splited[0]
+    extname = splited[1]
   }
+
 
   let commonOptions = {
     entry: {
@@ -75,13 +95,15 @@ function libMode(options) {
     },
     output: {
       path: outputDirectory,
-      library: camelCase(libName),
+      library: makeLibraryName(libName, library),
       libraryTarget: libraryTarget
     },
     module: {
-      rules: [{test: /.js$/, loader: 'babel-loader', exclude: ['node_modules']}]
+      rules: [
+        MakeLoaderOptions('js')
+      ]
     },
-    externals: Object.keys(libDeps),
+    externals: externals ? externals : Object.keys(libDeps),
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
@@ -97,11 +119,12 @@ function libMode(options) {
     })
   }
 
-  function buildCompressFileName(...args) {
+  function buildCompressFileName() {
+    
     return [
 
       // Also build Non-min library.
-      buildLibrary(args),
+      buildLibrary(arguments),
 
       // Rewrite output.filename
       Object.assign({}, commonOptions, {
@@ -126,4 +149,4 @@ function libMode(options) {
     : buildCompressFileName
 }
 
-module.exports = libMode
+module.exports = libraryMode

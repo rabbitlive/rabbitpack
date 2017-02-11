@@ -1,3 +1,1 @@
-const mode = require('./Mode')
-
-module.exports = mode('lib')()
+module.exports = require('./Mode')('lib')()

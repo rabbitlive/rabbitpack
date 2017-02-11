@@ -3,7 +3,7 @@ const extractTextPlugin = require('extract-text-webpack-plugin')
 
 console.log(
   MakeLoaderOptions('js'),
-  MakeLoaderOptions('css', {
+  MakeLoaderOptions('sass', {
     extractTextPlugin: new extractTextPlugin({
       filename: '[name].css'
     }) 

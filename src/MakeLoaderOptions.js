@@ -2,7 +2,6 @@ const { isString, isArray, isFunction } = require('lodash')
 
 const env = process.env.NODE_ENV || 'development'
 
-
 function mapOptionTypeToProp(key, option) {
   if(!option) return {}
 
@@ -193,19 +192,77 @@ function postHtmlLoaderOptions(options) {
 }
 
 
-function mapNameToLoader(name, options) {
+/**
+ * BabelLoader
+ * 
+ * @link [babeljs](https://babeljs.io/docs/)
+ * @link [babili](https://github.com/babel/babili)
+ * @link [babel-loader](https://github.com/babel/babel-loader)
+ */
+function babelLoaderOptions(options = {}) {
+  const DefaultBabelLoaderOptions = {
+    cacheDirectory: true,
+    presets: [
+      ['latest', ['es2015', {modules: false}]],
+      'react',
+      'stage-2'
+    ],
+    plugins: []
+  }
+
+  options.plugins = options.plugins || [] 
+
+  return {
+    loader: 'babel-loader',
+    options: Object.assign({}, DefaultBabelLoaderOptions, options, {
+      plugins: DefaultBabelLoaderOptions.plugins.concat(options.plugins)
+    })
+  }
+}
+
+
+/**
+ * TsLoader
+ * 
+ * @link [typescript](https://www.typescriptlang.org/docs/)
+ * @link [tsc options](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
+ * @link [ts-loader](https://github.com/TypeStrong/ts-loader)
+ */
+function tsLoaderOptions(options = {}) {
+  const DefaultTsLoaderOptions = {
+    compilerOptions: {
+      target: 'ES5',
+      sourceMap: true,
+      jsx: 'React'
+    }
+  }
+
+  return {
+    loader: 'ts-loader',
+    options: Object.assign({}, DefaultTsLoaderOptions, options)
+  }
+}
+
+
+function mapNameToLoader(name, options = {}) {
   
   switch(name) {
   case 'js':
   case 'es':
     return {
       test: /\.jsx?$/,
-      use: [{
-        loader: 'babel-loader',
-        options: {
-          
-        }
-      }]
+      use: [
+        babelLoaderOptions(options.js)
+      ]
+    }
+
+    
+  case 'ts':
+    return {
+      test: /\.{j|t}sx?$/,
+      use: [
+        DefaultTsLoaderOptions(options.ts)
+      ]
     }
 
     
@@ -223,7 +280,7 @@ function mapNameToLoader(name, options) {
           cssLoaderOptions(options.css),
           postcssLoaderOptions(options.postcss)
         ]
-      }) 
+      })
     }
     
   case 'less':
@@ -234,7 +291,7 @@ function mapNameToLoader(name, options) {
     return {
       test: /\.less$/,
       loader: options.extractTextPlugin.extract({
-        failback: 'style-loader',
+        fallback: 'style-loader',
         use: [
           cssLoaderOptions(options.css),
           lessLoaderOptions(options.less)
@@ -251,7 +308,7 @@ function mapNameToLoader(name, options) {
     return {
       test: /\.{scss|sass}$/,
       loader: options.extractTextPlugin.extract({
-        failback: 'style-loader',
+        fallback: 'style-loader',
         use: [
           cssLoaderOptions(options.css),
           sassLoaderOptions(options.sass)
