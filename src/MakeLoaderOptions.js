@@ -2,26 +2,19 @@ const { isString, isArray, isFunction } = require('lodash')
 
 const env = process.env.NODE_ENV || 'development'
 
-const DefaultLoaderOptions = {
-  excludeNodeModulesDir: false,
-  includeSourceDir: false
-}
-
 
 function mapOptionTypeToProp(key, option) {
-  return {
-    if(!option) return {}
+  if(!option) return {}
 
-    if(isString(key)) {
-      return {[key]: [option]}
-    } else if(isArray(key)) {
-      return {[key]: option}
-    } else if(isFunction(key)) {
-      return option(key)
-    } else {
-      console.warn(`Unsupports options type ${option} for ${key}.`)
-      return {}
-    }
+  if(isString(key)) {
+    return {[key]: [option]}
+  } else if(isArray(key)) {
+    return {[key]: option}
+  } else if(isFunction(key)) {
+    return option(key)
+  } else {
+    console.warn(`Unsupports options type ${option} for ${key}.`)
+    return {}
   }
 }
 
@@ -46,7 +39,7 @@ function cssLoaderOptions(options) {
     modules: true,
     importLoaders: 1,
     camelCase: true,
-    sourceMap: true
+    sourceMap: true,
     minimize: false
   }
   
@@ -221,12 +214,12 @@ function mapNameToLoader(name, options) {
     options.css = options.css || {}
     options.postcss = options.postcss || {}
     options.css.env = options.postcss.env = env
-    
+
     return {
       test: /\.css$/,
-      loader: options.extractPlug.extract({
-        failback: 'style-loader'
-        ues: [
+      use: options.extractTextPlugin.extract({
+        fallback: 'style-loader',
+        loader: [
           cssLoaderOptions(options.css),
           postcssLoaderOptions(options.postcss)
         ]
@@ -240,9 +233,9 @@ function mapNameToLoader(name, options) {
 
     return {
       test: /\.less$/,
-      loader: options.extractPlug.extract({
-        failback: 'style-loader'
-        ues: [
+      loader: options.extractTextPlugin.extract({
+        failback: 'style-loader',
+        use: [
           cssLoaderOptions(options.css),
           lessLoaderOptions(options.less)
         ]
@@ -257,9 +250,9 @@ function mapNameToLoader(name, options) {
 
     return {
       test: /\.{scss|sass}$/,
-      loader: options.extractPlug.extract({
-        failback: 'style-loader'
-        ues: [
+      loader: options.extractTextPlugin.extract({
+        failback: 'style-loader',
+        use: [
           cssLoaderOptions(options.css),
           sassLoaderOptions(options.sass)
         ]
@@ -270,8 +263,8 @@ function mapNameToLoader(name, options) {
   case 'html':
     return {
       test: '/\.html$/',
-      loader: options.extractPlug.extract({
-        ues: [
+      loader: options.extractTextPlugin.extract({
+        use: [
           htmlLoaderOptions(options.html),
           postHtmlLoaderOptions(options.posthtml)
         ]
@@ -291,11 +284,25 @@ function mapNameToLoader(name, options) {
 }
 
 
+const DefaultLoaderOptions = {
+  excludeNodeModulesDir: false,
+  includeSourceDir: false,
+  typed: false
+}
+
+
 function MakeLoaderOptions(name = 'js', options = {}) {
+  
+  options = Object.assign({}, DefaultLoaderOptions, options)
+
   let {
     excludeNodeModulesDir,
-    includeSourceDir
-  } = Object.assign({}, DefaultLoaderOptions, options)
+    includeSourceDir,
+    typed,
+    extractTextPlugin
+  } = options
+
+  //if(!extractTextPlugin) throw new Error()
   
   let excludes = mapOptionTypeToProp('exclude', excludeNodeModulesDir)
   let includes = mapOptionTypeToProp('include', excludeNodeModulesDir)
@@ -303,3 +310,6 @@ function MakeLoaderOptions(name = 'js', options = {}) {
   
   return Object.assign({}, mapNameToLoader(name, options), excludes, includes)
 }
+
+
+module.exports = MakeLoaderOptions
