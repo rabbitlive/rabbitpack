@@ -1,15 +1,25 @@
+/**
+ * LibraryMode.js
+ *
+ * Copyright 2017-2018 @Rabbit.
+ * 
+ */
+
 const webpack = require('webpack')
 const { camelCase } = require('lodash')
 const pkg = require('./pkg')
 
 
-const DefaultLibmodeOptions = {
+const DefaultLibraryModeOptions = {
   isOutputCompressFile: true,
+  inputFileName: './src/index.js',
+  outputDirectory: './dist',
   outputFileName: '[name].js',
   outputCompressFileName: '[name].min.js',
-  inputFileName: './src/index.js',
   compressTools: 'uglify',
-  libraryTarget: 'umd'
+  libraryTarget: 'umd',
+  excludeNodeModulesDir: false,
+  includeSourceDir: false
 }
 
 
@@ -34,28 +44,39 @@ function mapCompressToPlugin(name, options = {}) {
 
 
 function libMode(options) {
-  const {
+  
+  let {
     from,
     to,
     isOutputCompressFile,
     inputFileName,
+    outputDirectory,
     outputFileName,
     outputCompressFileName,
     compressTools,
     libraryTarget
-  } = Object.assign({}, DefaultLibmodeOptions, options)
+  } = Object.assign({}, DefaultLibraryModeOptions, options)
 
-  const libName = pkg().name
-  const libDeps = pkg().devDependencies
+  
+  let { name: libName, devDependencies: libDeps } = pkg()
 
-  const commonOptions = {
+
+  // Rewrite libName when provide `to` option.
+  if(to) {
+    if(!/\.js$/.test(to))
+      throw new Error(`Bad Output file name: ${to}`)
+
+    libName = outputFileName.split('.js')[0] 
+  }
+
+  let commonOptions = {
     entry: {
       [libName]: from || inputFileName
     },
     output: {
-      path: './dist',
+      path: outputDirectory,
       library: camelCase(libName),
-      libraryTarget: 'umd'
+      libraryTarget: libraryTarget
     },
     module: {
       rules: [{test: /.js$/, loader: 'babel-loader', exclude: ['node_modules']}]
@@ -78,13 +99,18 @@ function libMode(options) {
 
   function buildCompressFileName(...args) {
     return [
+
+      // Also build Non-min library.
       buildLibrary(args),
-      
+
+      // Rewrite output.filename
       Object.assign({}, commonOptions, {
         output: Object.assign({}, commonOptions.output, {
           filename: outputCompressFileName
         }),
         plugins: commonOptions.plugins.concat(
+
+          // Compress library
           mapCompressToPlugin(compressTools),
           new webpack.LoaderOptionsPlugin({
             minimize: true,

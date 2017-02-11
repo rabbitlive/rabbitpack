@@ -1,3 +1,7 @@
+/**
+ * Mode
+ */
+
 function mode(name, options) {
   if(!name) throw new Error('name is required')
 
@@ -5,7 +9,7 @@ function mode(name, options) {
     switch(name) {
     case 'lib':
     case 'library':
-      return require('./libmode')(from, to, options)
+      return require('./LibraryMode')(from, to, options)
     default: throw new Error(`Unknow mode: ${name}`)
     }
   }
