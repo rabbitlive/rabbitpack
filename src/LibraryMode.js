@@ -115,11 +115,18 @@ function libraryMode(options) {
     return Object.assign({}, commonOptions, {
       output: Object.assign({}, commonOptions.output, {
         filename: outputFileName
-      })
+      }),
+      plugins: [
+        new webpack.DefinePlugin({
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+        })
+      ]
     })
   }
 
   function buildCompressFileName() {
+
+    const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
     
     return [
 
@@ -138,7 +145,11 @@ function libraryMode(options) {
           new webpack.LoaderOptionsPlugin({
             minimize: true,
             debug: false
-          })
+          }),
+          new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+          }),
+          new LodashModuleReplacementPlugin()
         )
       })
     ]

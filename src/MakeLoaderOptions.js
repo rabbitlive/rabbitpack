@@ -207,7 +207,9 @@ function babelLoaderOptions(options = {}) {
       'react',
       'stage-2'
     ],
-    plugins: []
+    plugins: [
+      "lodash"
+    ]
   }
 
   options.plugins = options.plugins || [] 
