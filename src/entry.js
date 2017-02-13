@@ -85,8 +85,8 @@ function wxappEntry() {
 
       return Object.assign({}, pages, {
         app: [
-          'webpack-dev-server/client',
-          'webpack/hot/only-dev-server',
+          //'webpack-dev-server/client',
+          //'webpack/hot/only-dev-server',
           './src/app.js'
         ]
       })

@@ -65,28 +65,36 @@ function cssLoaderOptions(options) {
  */
 function postcssLoaderOptions(options) {
 
-  const short   = require('postcss-short')
-  const nesting = require('postcss-nesting')
-  const mixins  = require('postcss-mixins')
-  const colorfx = require('postcss-color-function')
-
   const DefaultPostcssLoaderOptions = {
     sourceMap: 'inline',
-    plugins: [
-      short(),
-      mixins(),
-      colorfx(),
-      mixins()
-    ]
+    plugins: true
   }
-  
+
   return {
     loader: 'postcss-loader',
-    options: Object.assign({}, DefaultPostcssLoaderOptions, options, {
-      plugins: DefaultPostcssLoaderOptions.plugins.concat(options.plugins)
-    })
+    query: Object.assign({}, DefaultPostcssLoaderOptions, options)
   }
 }
+
+class PostcssPlugins {
+  apply(compiler) {
+    compiler.plugin('compilation', function (compilation) {
+      compilation.plugin('postcss-loader-before-processing', function() {
+        const short   = require('postcss-short')
+        const nesting = require('postcss-nesting')
+        const mixins  = require('postcss-mixins')
+        const colorfx = require('postcss-color-function')
+        
+        return [
+          short(),
+          nesting(),
+          colorfx(),
+          mixins()
+        ]
+      })
+    })
+  }
+} 
 
 /**
  * SassLoader
@@ -201,24 +209,21 @@ function postHtmlLoaderOptions(options) {
  */
 function babelLoaderOptions(options = {}) {
   const DefaultBabelLoaderOptions = {
-    cacheDirectory: true,
-    presets: [
-      ['latest', ['es2015', {modules: false}]],
-      'react',
-      'stage-2'
-    ],
-    plugins: [
-      "lodash"
-    ]
+    //cacheDirectory: true,
+    // presets: [
+    //   ['latest', ['es2015', {modules: false}]],
+    //   'stage-2',
+    //   'react'
+    // ],
+    // plugins: [
+    //   "lodash"
+    // ]
   }
 
   options.plugins = options.plugins || [] 
 
   return {
-    loader: 'babel-loader',
-    options: Object.assign({}, DefaultBabelLoaderOptions, options, {
-      plugins: DefaultBabelLoaderOptions.plugins.concat(options.plugins)
-    })
+    loader: 'babel-loader'
   }
 }
 
@@ -278,7 +283,7 @@ function mapNameToLoader(name, options = {}) {
       test: /\.css$/,
       use: options.extractTextPlugin.extract({
         fallback: 'style-loader',
-        loader: [
+        use: [
           cssLoaderOptions(options.css),
           postcssLoaderOptions(options.postcss)
         ]
@@ -372,3 +377,4 @@ function MakeLoaderOptions(name = 'js', options = {}) {
 
 
 module.exports = MakeLoaderOptions
+module.exports.PostcssPlugins = PostcssPlugins
